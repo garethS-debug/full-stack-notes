@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 
 // Define the port the server will listen on
-const PORT = 3001;
+const PORT = 3004;
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
@@ -35,11 +35,17 @@ const writeData = (data) => {
 
 // TODO: Handle GET request at the root route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.htm"));
 });
 
 // Handle GET request to retrieve stored data
 app.get("/data", (req, res) => {
+  const data = readData();
+  res.json(data);
+});
+
+// Backward-compatible API route for older client URLs
+app.get("/public/data", (req, res) => {
   const data = readData();
   res.json(data);
 });
@@ -51,6 +57,78 @@ app.post("/data", (req, res) => {
   currentData.push(newData);
   writeData(currentData);
   res.json({ message: "Data saved successfully", data: newData });
+});
+
+// Backward-compatible API route for older client URLs
+app.post("/public/data", (req, res) => {
+  const newData = { id: uuidv4(), ...req.body };
+  const currentData = readData();
+  currentData.push(newData);
+  writeData(currentData);
+  res.json({ message: "Data saved successfully", data: newData });
+});
+
+
+//Put request
+app.put("/data/put/:id", (req, res) => {
+  const data = readData();
+  const item = data.find((item) => item.id === req.params.id);
+  
+  if (!item) 
+    {
+    return res.status(404).json({ message: "Data not found" });
+  }
+
+  //item
+  //res.json({ received: item.body });
+ // data[index].welcome = `${req.body.welcome} ${data[index].welcome}`.trim();
+ item.welcome = `${req.body.welcome} ${item.welcome}`.trim();
+  //  writeData(currentData);
+  writeData(data);
+  // currentData.splice(newData);
+
+  // writeData(currentData);
+  //res.json({ message: "Data to save", data: newData , oldData: currentData});
+  res.json({
+    message: "Data updated",
+    data: item,
+  });
+
+  // item.message = req.body.welcome  + " " + item.welcome;
+ // res.json({ received: req.body.welcome });
+ // res.json({ id: item.id, message: item.message});
+});
+
+//delete
+
+app.delete("/data/delete/:id", (req, res) => {
+  const data = readData();
+  const item = data.find((item) => item.id === req.params.id);
+  const index = data.findIndex((item) => item.id === req.params.id);
+  
+  if (!item) 
+    {
+    return res.status(404).json({ message: "Data not found" });
+  }
+
+  //item
+ 
+  const deletedItem = data[index];
+  //  
+ data.splice(index, 1);
+ writeData(data);
+  // currentData.splice(newData);
+
+  // writeData(currentData);
+  //res.json({ message: "Data to save", data: newData , oldData: currentData});
+  res.json({
+    message: "Data deleted",
+    data: item,
+  });
+
+  // item.message = req.body.welcome  + " " + item.welcome;
+ // res.json({ received: req.body.welcome });
+ // res.json({ id: item.id, message: item.message});
 });
 
 // Handle POST request at the /echo route

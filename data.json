@@ -4,5 +4,21 @@
     "username": "john_doe",
     "email": "john_doe@example.com",
     "password": "securepassword123"
+  },
+  {
+    "id": "d472a6d4-2dbd-41d4-9e89-0617d323d13c",
+    "text": "test"
+  },
+  {
+    "id": "04f793ed-692d-4e8e-92b3-35b6fa33e3d4",
+    "text": "tets"
+  },
+  {
+    "id": "e7542237-5f7b-495e-9bc0-da132018c35e",
+    "text": "test"
+  },
+  {
+    "id": "ed7017a7-17b0-471d-9e6e-37b4fcb2a0c7",
+    "text": "API"
   }
 ]
