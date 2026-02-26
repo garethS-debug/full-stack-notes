@@ -13,6 +13,9 @@ const PORT = 3001;
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
+// TODO:  Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, "public")));
+
 // Define the path to the JSON file
 const dataFilePath = path.join(__dirname, "data.json");
 
@@ -30,9 +33,9 @@ const writeData = (data) => {
   fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
 };
 
-// Handle GET request at the root route
+// TODO: Handle GET request at the root route
 app.get("/", (req, res) => {
-  res.send("Welcome to the simple Express app!");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Handle GET request to retrieve stored data
@@ -49,80 +52,6 @@ app.post("/data", (req, res) => {
   writeData(currentData);
   res.json({ message: "Data saved successfully", data: newData });
 });
-
-// Handle GET request to retrieve data by ID
-app.get("/data/:id", (req, res) => {
-  const data = readData();
-  const item = data.find((item) => item.id === req.params.id);
-  if (!item) {
-    return res.status(404).json({ message: "Data not found" });
-  }
-  res.json(item);
-});
-
-// TODO: Handle PUT request to update data by ID
-app.put("/data/put/:id", (req, res) => {
-  const data = readData();
-  const item = data.find((item) => item.id === req.params.id);
-  
-  if (!item) 
-    {
-    return res.status(404).json({ message: "Data not found" });
-  }
-
-  //item
-  //res.json({ received: item.body });
- // data[index].welcome = `${req.body.welcome} ${data[index].welcome}`.trim();
- item.welcome = `${req.body.welcome} ${item.welcome}`.trim();
-  //  writeData(currentData);
-  writeData(data);
-  // currentData.splice(newData);
-
-  // writeData(currentData);
-  //res.json({ message: "Data to save", data: newData , oldData: currentData});
-  res.json({
-    message: "Data updated",
-    data: item,
-  });
-
-  // item.message = req.body.welcome  + " " + item.welcome;
- // res.json({ received: req.body.welcome });
- // res.json({ id: item.id, message: item.message});
-});
-
-
-// TODO: Handle DELETE request to delete data by ID
-app.delete("/data/delete/:id", (req, res) => {
-  const data = readData();
-  const item = data.find((item) => item.id === req.params.id);
-  const index = data.findIndex((item) => item.id === req.params.id);
-  
-  if (!item) 
-    {
-    return res.status(404).json({ message: "Data not found" });
-  }
-
-  //item
- 
-  const deletedItem = data[index];
-  //  
- data.splice(index, 1);
- writeData(data);
-  // currentData.splice(newData);
-
-  // writeData(currentData);
-  //res.json({ message: "Data to save", data: newData , oldData: currentData});
-  res.json({
-    message: "Data deleted",
-    data: item,
-  });
-
-  // item.message = req.body.welcome  + " " + item.welcome;
- // res.json({ received: req.body.welcome });
- // res.json({ id: item.id, message: item.message});
-});
-
-
 
 // Handle POST request at the /echo route
 app.post("/echo", (req, res) => {

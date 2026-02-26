@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to fetch data from the backend
   const fetchData = async () => {
     try {
-      const response = await fetch("/data");
+      const response = await fetch("./data");
       const data = await response.json();
       dataList.innerHTML = ""; // Clear the list before rendering
       data.forEach((item) => {
