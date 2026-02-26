@@ -1,2 +1,8 @@
 [
+  {
+    "id": "2d498d31-f89a-4165-93a8-dc29d772d0ab",
+    "username": "john_doe",
+    "email": "john_doe@example.com",
+    "password": "securepassword123"
+  }
 ]
