@@ -73,30 +73,22 @@ app.post("/public/data", (req, res) => {
 app.put("/data/put/:id", (req, res) => {
   const data = readData();
   const item = data.find((item) => item.id === req.params.id);
-  
-  if (!item) 
-    {
+
+  if (!item) {
     return res.status(404).json({ message: "Data not found" });
   }
 
-  //item
-  //res.json({ received: item.body });
- // data[index].welcome = `${req.body.welcome} ${data[index].welcome}`.trim();
- item.welcome = `${req.body.welcome} ${item.welcome}`.trim();
-  //  writeData(currentData);
-  writeData(data);
-  // currentData.splice(newData);
+  if (typeof req.body.text !== "string" || req.body.text.trim() === "") {
+    return res.status(400).json({ message: "Text is required" });
+  }
 
-  // writeData(currentData);
-  //res.json({ message: "Data to save", data: newData , oldData: currentData});
+  item.text = req.body.text.trim();
+  writeData(data);
+
   res.json({
     message: "Data updated",
     data: item,
   });
-
-  // item.message = req.body.welcome  + " " + item.welcome;
- // res.json({ received: req.body.welcome });
- // res.json({ id: item.id, message: item.message});
 });
 
 //delete
