@@ -2,12 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const dataList = document.getElementById("data-list");
   const dataForm = document.getElementById("data-form");
   const dataInput = document.getElementById("data-input");
-const API_BASE =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3004"
-    : window.location.origin;
+// const API_BASE =
+//   window.location.hostname === "localhost"
+//     ? "http://localhost:3004"
+//     : window.location.origin;
 
-const DATA_ENDPOINT = `${API_BASE}/data`;
+
+const DATA_ENDPOINT = "/data";
 
   const fetchData = async () => {
     try {
@@ -48,26 +49,26 @@ const DATA_ENDPOINT = `${API_BASE}/data`;
 
   // Handle form submission to add new data
   dataForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const newData = { text: dataInput.value };
+  event.preventDefault();
 
-    try {
-      const response = await fetch(DATA_ENDPOINT, {
-        method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData),
-      });
+  const newData = { text: dataInput.value.trim() };
+  if (!newData.text) return;
 
-      if (response.ok) {
-        dataInput.value = ""; // Clear input field
-        fetchData(); // Refresh the list
-      } else {
-        throw new Error(`Failed to add data: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error adding data:", error);
-    }
-  });
+  try {
+    const response = await fetch(DATA_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newData),
+    });
+
+    if (!response.ok) throw new Error(`POST failed: ${response.status}`);
+
+    dataInput.value = "";
+    fetchData();
+  } catch (error) {
+    console.error("Error adding data:", error);
+  }
+});
 
     // Handle form submission to delete data
   dataList.addEventListener("click", async (event) => {
