@@ -118,9 +118,7 @@ app.delete("/data/delete/:id", (req, res) => {
     data: item,
   });
 
-  // item.message = req.body.welcome  + " " + item.welcome;
- // res.json({ received: req.body.welcome });
- // res.json({ id: item.id, message: item.message});
+
 });
 
 // Handle POST request at the /echo route

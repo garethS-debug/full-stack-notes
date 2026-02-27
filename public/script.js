@@ -2,10 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const dataList = document.getElementById("data-list");
   const dataForm = document.getElementById("data-form");
   const dataInput = document.getElementById("data-input");
-  const API_BASE = window.location.origin.includes("3004")
-    ? window.location.origin
-    : "http://localhost:3004";
-  const DATA_ENDPOINT = `${API_BASE}/data`;
+// const API_BASE =
+//   window.location.hostname === "localhost"
+//     ? "http://localhost:3004"
+//     : window.location.origin;
+
+
+const DATA_ENDPOINT = "/data";
 
   const fetchData = async () => {
     try {
@@ -46,31 +49,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle form submission to add new data
   dataForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const newData = { text: dataInput.value };
+  event.preventDefault();
 
-    try {
-      const response = await fetch(DATA_ENDPOINT, {
-        method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData),
-      });
+  const newData = { text: dataInput.value.trim() };
+  if (!newData.text) return;
 
-      if (response.ok) {
-        dataInput.value = ""; // Clear input field
-        fetchData(); // Refresh the list
-      } else {
-        throw new Error(`Failed to add data: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error adding data:", error);
-    }
-  });
+  try {
+    const response = await fetch(DATA_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newData),
+    });
+
+    if (!response.ok) throw new Error(`POST failed: ${response.status}`);
+
+    dataInput.value = "";
+    fetchData();
+  } catch (error) {
+    console.error("Error adding data:", error);
+  }
+});
 
     // Handle form submission to delete data
   dataList.addEventListener("click", async (event) => {
-    // event.preventDefault();
-    // const newData = { text: dataInput.value };
+
   const target = event.target;
   const action = target.dataset.action;
   const id = target.dataset.id;
@@ -95,6 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
  if (action === "edit") {
     const li = target.closest("li");
     const textSpan = li.querySelector("span");
+
+    if (li.querySelector(".edit-input") || li.querySelector(".save-btn")) {
+    return;
+  }
 
     const currentText = textSpan.textContent;
      const input = document.createElement("input");
@@ -143,41 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 });
  fetchData();
-//       // Handle form submission to editing data
-//   dataList.addEventListener("click", async (event) => {
-//     const target = event.target;
-//     if (target.dataset.action !== "edit") return;
-//     const id = target.dataset.id;
 
-//     const currentText = target.previousSibling.textContent;
-//     // const newText = prompt("Edit the text:", currentText);
-   
-
-
-//  save.addEventListener("click", async () => {
-//       const newText = input.value;
-//     try {
-//       const response = await fetch(`${DATA_ENDPOINT}/put/${id}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ text: newText }),
-//       });
-
-//       if (response.ok) {
-//         // dataInput.value = ""; // Clear input field
-//         fetchData(); // Refresh the list
-//       } else {
-//         throw new Error(`Failed to put data: ${response.status}`);
-//       }
-//     } catch (error) {
-//       console.error("Error putting data:", error);
-//     }
-//     });
-//   });
-  
-
-
-  // Fetch data on page load
 
 
 });
