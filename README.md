@@ -6,7 +6,7 @@ It lets users create, view, edit, and delete notes through a browser interface. 
 ## Installation
 This is hosted in render.com
 ## Usage
-Hosted on render.com
+Hosted on render.com https://full-stack-notes-frhx.onrender.com
 ## Licence
 MIT
 ## Author Name
