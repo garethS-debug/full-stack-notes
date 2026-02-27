@@ -2,10 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const dataList = document.getElementById("data-list");
   const dataForm = document.getElementById("data-form");
   const dataInput = document.getElementById("data-input");
-  const API_BASE = window.location.origin.includes("3004")
-    ? window.location.origin
-    : "http://localhost:3004";
-  const DATA_ENDPOINT = `${API_BASE}/data`;
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3004"
+    : window.location.origin;
+
+const DATA_ENDPOINT = `${API_BASE}/data`;
 
   const fetchData = async () => {
     try {
