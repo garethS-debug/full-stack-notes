@@ -69,8 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission to delete data
   dataList.addEventListener("click", async (event) => {
-    // event.preventDefault();
-    // const newData = { text: dataInput.value };
+
   const target = event.target;
   const action = target.dataset.action;
   const id = target.dataset.id;
@@ -95,6 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
  if (action === "edit") {
     const li = target.closest("li");
     const textSpan = li.querySelector("span");
+
+    if (li.querySelector(".edit-input") || li.querySelector(".save-btn")) {
+    return;
+  }
 
     const currentText = textSpan.textContent;
      const input = document.createElement("input");
@@ -143,41 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 });
  fetchData();
-//       // Handle form submission to editing data
-//   dataList.addEventListener("click", async (event) => {
-//     const target = event.target;
-//     if (target.dataset.action !== "edit") return;
-//     const id = target.dataset.id;
 
-//     const currentText = target.previousSibling.textContent;
-//     // const newText = prompt("Edit the text:", currentText);
-   
-
-
-//  save.addEventListener("click", async () => {
-//       const newText = input.value;
-//     try {
-//       const response = await fetch(`${DATA_ENDPOINT}/put/${id}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ text: newText }),
-//       });
-
-//       if (response.ok) {
-//         // dataInput.value = ""; // Clear input field
-//         fetchData(); // Refresh the list
-//       } else {
-//         throw new Error(`Failed to put data: ${response.status}`);
-//       }
-//     } catch (error) {
-//       console.error("Error putting data:", error);
-//     }
-//     });
-//   });
-  
-
-
-  // Fetch data on page load
 
 
 });
